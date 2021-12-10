@@ -1,4 +1,7 @@
-import { ChakraProvider,extendTheme } from '@chakra-ui/react'
+import React from 'react';
+import '../node_modules/@fullcalendar/common/main.css'; // @fullcalendar/react imports @fullcalendar/common
+import '../node_modules/@fullcalendar/daygrid/main.css'; // @fullcalendar/timegrid imports @fullcalendar/daygrid
+import { ChakraProvider,extendTheme } from '@chakra-ui/react';
 
 // 2. Extend the theme to include custom colors, fonts, etc
 const colors = {

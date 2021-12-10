@@ -6,7 +6,7 @@ import { Box,Text } from '@chakra-ui/react';
 export default function BookingCard() {
     return (
         <Link href="/jj">
-            <Box cursor="pointer" bg="white" borderTop="4px solid yellow" _hover={{border:"2px solid #0069FF"}} shadow="md" maxW='sm' borderWidth='1px' borderRadius='md' overflow='hidden'>
+            <Box cursor="pointer" bg="white" borderTop="2px solid" borderTopColor="yellow.400" _hover={{border:"2px solid #0069FF"}} shadow="md" maxW='sm' borderWidth='1px' borderRadius='md' overflow='hidden'>
              <Box pt="7" pb="3">
                 <Box px="3">
                     <Text fontFamily="'Poppins', sans-serif" color="#000" fontSize="1.28rem" mb='3'fontWeight='normal'lineHeight='tight'

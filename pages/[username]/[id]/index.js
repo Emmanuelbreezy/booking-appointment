@@ -1,13 +1,13 @@
 import React from 'react';
 import Head from 'next/head';
-import Layout from '../../hoc/Layout/Layout';
-import NewBookingUI from '../../components/NewBooking/NewBooking';
+import Layout from '../../../hoc/Layout/Layout';
+import Detail from '../../../components/Detail/Detail';
 
-export default function NewBookings() {
+export default function ViewBookings() {
   return (
     <div>
       <Head>
-        <title>New Appointment - Bookme </title>
+        <title>My Appointment - Bookme </title>
         <meta name="description" content="" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -16,7 +16,7 @@ export default function NewBookings() {
       </Head>
 
       <Layout>
-          <NewBookingUI />
+          <Detail />
       </Layout>
       
     </div>

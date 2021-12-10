@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 import { Box,Container,Text,SimpleGrid,Stack,Avatar,AvatarBadge} from '@chakra-ui/react';
 import BookingCard from '../Card/BookingCard';
 
