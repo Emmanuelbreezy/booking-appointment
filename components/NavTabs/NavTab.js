@@ -5,7 +5,7 @@ import { Box,Tabs,TabList,Tab,Container,Heading,Button } from '@chakra-ui/react'
 export default function NavTab() {
     return (
         <Box bg='white' w='100%' p={4} pb={0} mb={2} shadow="lg">
-            <Container pt={1} maxW={{base:"container.lg"}} pt={5}>
+            <Container pt={1} maxW={{base:"container.lg"}}>
                 <Box display="flex" alignItems="start" justifyContent="space-between">
                     <Tabs border="none">
                         <Heading mb={4} fontWeight="normal"  fontSize="1.5rem" color="blackAlpha.700" fontFamily="'Poppins', sans-serif">My Bookings</Heading>

@@ -1,6 +1,9 @@
 import React from 'react';
 import Head from 'next/head';
+import {Box, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import Layout from '../../hoc/Layout/Layout';
+import AllUser from '../../components/AllUser/AllUser';
+import AllAppointment from '../../components/AllAppointment/AllAppointment';
 
 export default function Admin() {
   return (
@@ -15,7 +18,26 @@ export default function Admin() {
       </Head>
 
       <Layout>
-          all admin
+        <Box pt="2rem" pb="2rem">
+            <Box>
+              <Tabs align="center" variant='enclosed'>
+                <TabList>
+                  <Tab>All Users</Tab>
+                  <Tab>All Appointments</Tab>
+                </TabList>
+
+
+                <TabPanels>
+                    <TabPanel>
+                      <AllUser />
+                    </TabPanel>
+                    <TabPanel>
+                      <AllAppointment />
+                    </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </Box>
+        </Box>
       </Layout>
       
     </div>

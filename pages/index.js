@@ -5,7 +5,9 @@ import HomeUI from '../components/Home/Home';
 import NavTab from '../components/NavTabs/NavTab';
 
 
-export default function Home() {
+export default function Home(props) {
+  console.log(props.getAllData)
+
   return (
     <div>
       <Head>

@@ -10,6 +10,7 @@ export default function Calendar(props) {
       <FullCalendar
         plugins={[ dayGridPlugin,interactionPlugin  ]}
         initialView="dayGridMonth"
+        selectable={true}
         dateClick={props.handleDateClick}
         validRange={(nowDate) => ({
           start: nowDate

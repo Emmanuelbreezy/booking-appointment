@@ -1,17 +1,72 @@
 import React,{useState} from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Box,Container,Text,Button,Input,InputGroup,InputLeftAddon } from '@chakra-ui/react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { Box,Container,Text,Button,Input,InputGroup,InputLeftAddon,FormErrorMessage,FormControl } from '@chakra-ui/react';
 import Calendar from '../Calendar/Calendar';
 
 export default function NewBookingUI() {
-    const [date,setDate] = useState('');
-    const [startTime,setStartTime] = useState('');
-    const [endTime,setEndTime] = useState('');
+    const router = useRouter()
+    const [loading,setLoading] = useState(false);
+    const [_date,setDate] = useState('');
 
     const handleDateClick = (args) => {
-       console.log(args,'aaa');
-    //    setDate(args.datestr);
+       if(args.dateStr){
+           setDate(args.dateStr);
+       }
     }
+
+    const handleSubmitToApi = (data) =>{
+        if(data){
+            setLoading(true);
+            fetch('/api/new-appointment',{
+                method:'POST',
+                body: JSON.stringify(data),
+                headers:{
+                    'Content-Type': 'application/json'
+                }
+            }).then(resp => {
+                return resp.json()
+            }).then(data => {
+                setTimeout(()=>{
+                    setLoading(false);
+                    router.push('/')
+                },1000)
+
+            }).catch(err => {
+                console.log(err);
+                setLoading(false);
+            })
+               
+                               
+        }
+    }
+
+    const formik = useFormik({
+        enableReinitialize:true,
+        initialValues: {
+            startTime: '',
+            endTime: '',
+        },
+        validationSchema: Yup.object({
+            startTime: Yup.string()
+              .required('Required'),
+            endTime: Yup.string()
+              .required('Required'),
+          }),
+          onSubmit: values => {
+              const obj= {
+                  startTime:values.startTime,
+                  endTime:values.endTime,
+                  date: _date
+              }
+            handleSubmitToApi(obj);
+        },
+    })
+
+
+
     return (
         <Box height="auto" pb="10">
             <Box pt="2rem" pb="2rem"  borderBottom="1px solid #f5f5f5">
@@ -29,7 +84,7 @@ export default function NewBookingUI() {
                         </Button>
                     </Link>
                     <Box>
-                        <Text fontFamily="'Poppins', sans-serif" color="#000" fontSize="1.28rem" mb='3'fontWeight='normal'lineHeight='tight'>
+                        <Text fontFamily="'Poppins', sans-serif" color="#000" fontSize={{lg:"1.28rem"}} mb='3'fontWeight='normal'lineHeight='tight'>
                             Book New Appointment
                         </Text>
                     </Box>
@@ -38,40 +93,68 @@ export default function NewBookingUI() {
                 </Container>
             </Box>
             <Box height="auto"  pt="5">
-                <Container  px={7} maxW={{base:"container.lg"}}>
+                <Container  px={{base:5, md: 7, lg:7}} maxW={{base:"container.lg"}}>
                     <Box mb="2rem" w="100%" textAlign="center">
                         <Text fontWeight="light" fontSize="1.0rem">Select Date and Time</Text>
                     </Box>
                     <Box>
-                        <Box pt={3} pb={12} display="flex" alignItems="center" justifyContent="space-between">
-                            <Box w={{sm:"100%",lg:"45%"}} display="flex" alignItems="center">
-                                <Box >
-                                    <Text mb="2">Start Time</Text>
+                        <form onSubmit={formik.handleSubmit}>
+                            <Box pt={3} pb={12} display={{lg:"flex"}} alignItems="center" justifyContent="space-between">
+                                <Box width={{lg:"45%"}} display={{lg:"flex"}} alignItems="center">
+                                    <Box>
+                                       <FormControl isInvalid={formik.errors.startTime && formik.touched.startTime}>
+                                        <Text mb="2">Start Time</Text>
+                                            <InputGroup>
+                                                <InputLeftAddon />
+                                                <Input type='time' name="startTime"cursor="pointer" placeholder='Start Time'
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                value={formik.values.startTime} 
+                                                />
+                                            </InputGroup>
+                                                {formik.touched.startTime && formik.errors.startTime ? (
+                                                    <FormErrorMessage>{formik.errors.startTime}</FormErrorMessage>
+                                                 
+                                                ) : null}
+                                        </FormControl>
+                                    </Box>
+                                    <Box ml={{lg:"5"}}>
+                                      <FormControl isInvalid={formik.errors.endTime && formik.touched.endTime}>
+                                        <Text mb="2">End Time</Text>
                                         <InputGroup>
-                                            <InputLeftAddon children='' />
-                                            <Input type='time' cursor="pointer" placeholder='Start Time' onChange={(e) => setStartTime(e.target.value)} />
+                                            <InputLeftAddon />
+                                            <Input type="time" name="endTime"  cursor="pointer" placeholder='End Time'
+                                             onChange={formik.handleChange}
+                                             onBlur={formik.handleBlur}
+                                             value={formik.values.endTime}  />
                                         </InputGroup>
-
-                                 </Box>
-                                <Box ml="5">
-                                    <Text mb="2">End Time</Text>
-                                    <InputGroup>
-                                        <InputLeftAddon children='' />
-                                        <Input type='time' cursor="pointer" placeholder='End Time' onChange={(e) => setEndTime(e.target.value)} />
-                                    </InputGroup>
+                                        {formik.touched.endTime && formik.errors.endTime ? (
+                                            <FormErrorMessage>{formik.errors.endTime}</FormErrorMessage>
+                                        ) : null}
+                                      </FormControl>
+                                    </Box>
+                                    
                                 </Box>
-                                
+                                <Box width={{lg:"40%"}} mt={{base:7, md:0, lg:0}}>
+                                    <Text>Define how long the meeting will be. It can be as long as 1 hour.</Text>
+                                </Box>
                             </Box>
-                            <Box w={{sm:"100%",lg:"40%"}}>
-                                <Text>Define how long the meeting will be. It can be as long as 1 hour.</Text>
+                            <Box>
+                                <Calendar  handleDateClick={handleDateClick}/>
+                                <FormControl isInvalid={!_date}>
+                                    <Input type="date" name="date" disabled cursor="pointer" placeholder='Date' 
+                                    value={_date}  />
+                                    {!_date ? (
+                                        <FormErrorMessage>Required</FormErrorMessage>
+                                    ) : null}
+                                 </FormControl>
                             </Box>
-                        </Box>
-                        <Box>
-                            <Calendar  handleDateClick={handleDateClick}/>
-                        </Box>
-                        <Box mt={8} display="flex" justifyContent="flex-end">
-                            <Button bg="#0069FF" color="#fff" _focus={{bg:"#0069FF",opacity:"1"}} _hover={{bg:"#0069FF",opacity:"0.8"}} w="100%" >Submit Appointment</Button>
-                        </Box>
+
+                            <Box mt={8} display="flex" justifyContent="flex-end">
+                                <Button isLoading={loading} loadingText={`${loading ? 'Booking...': ''}`} type="submit" bg="#0069FF" color="#fff" _focus={{bg:"#0069FF",opacity:"1"}} _hover={{bg:"#0069FF",opacity:"0.8"}} w="100%" >Book Appointment</Button>
+                            </Box>
+                        </form>
+
                     </Box>
                 
                       
@@ -80,3 +163,4 @@ export default function NewBookingUI() {
         </Box>
     )
 }
+

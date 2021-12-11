@@ -3,10 +3,43 @@ import Link from 'next/link';
 import { Box,Text } from '@chakra-ui/react';
 
 
-export default function BookingCard() {
+export default function BookingCard(props) {
+  
+
+    const displayTimeFormat = (time)=>{
+        var hours, minutes, meridian;
+        hours = time.split(':')[0];
+        minutes = time.split(':')[1];
+        if(hours > 12){
+            meridian = 'pm';
+            hours -= 12;
+        }else if(hours < 12){
+            meridian = 'am';
+            if(hours == 0){
+                hours = 12;
+            }
+        }else {
+            meridian = 'pm';
+        }
+
+        var fulltime = hours + ':' + minutes+ ' ' + meridian;
+
+        return fulltime;
+    }
+
+    const displayDateFormat = (date)=>{
+        const mydate = new Date(props.data.date);
+        return mydate.toDateString();
+    }
+
+    const currentDate = new Date();
+    const GiveDate = new Date(props.data.date);
+    const checkIfGreaterThanTodayDate = GiveDate > currentDate ? 'white' : '#eee';
+    const checkIfBorder = GiveDate > currentDate ? 'yellow.400' : 'black.400';
+
     return (
-        <Link href="/jj">
-            <Box cursor="pointer" bg="white" borderTop="2px solid" borderTopColor="yellow.400" _hover={{border:"2px solid #0069FF"}} shadow="md" maxW='sm' borderWidth='1px' borderRadius='md' overflow='hidden'>
+        <a>
+            <Box cursor="pointer" bg={checkIfGreaterThanTodayDate} borderTop="2px solid" borderTopColor={checkIfBorder} _hover={{border:"2px solid #0069FF"}} shadow="md" maxW='sm' borderWidth='1px' borderRadius='md' overflow='hidden'>
              <Box pt="7" pb="3">
                 <Box px="3">
                     <Text fontFamily="'Poppins', sans-serif" color="#000" fontSize="1.28rem" mb='3'fontWeight='normal'lineHeight='tight'
@@ -30,7 +63,7 @@ export default function BookingCard() {
                                 c4.473,0,8.1-3.626,8.1-8.101C18.1,6.527,14.473,2.9,10,2.9z M10,17.101c-3.368,0-6.1-2.731-6.1-6.1s2.731-6.1,6.1-6.1
                                 s6.101,2.731,6.101,6.1C16.101,14.369,13.369,17.101,10,17.101z"/>
                             </svg>
-                            <Text  color="blackAlpha.700" fontFamily="'Poppins', sans-serif" fontWeight='normal' fontSize="0.9rem">9:30am - 10.00am</Text>
+                            <Text  color="blackAlpha.700" fontFamily="'Poppins', sans-serif" fontWeight='normal' fontSize="0.9rem">{displayTimeFormat(props.data.startTime)} - {displayTimeFormat(props.data.endTime)} </Text>
                         </Box>
                     </Box>
                     <Box mt="2" >
@@ -41,23 +74,25 @@ export default function BookingCard() {
                             <path fill="gray" d="M17,3h-1v2h-3V3H7v2H4V3H3C1.899,3,1,3.9,1,5v12c0,1.1,0.899,2,2,2h14c1.1,0,2-0.9,2-2V5C19,3.9,18.1,3,17,3
                                 z M17,17H3V9h14V17z M6.5,1h-2v3.5h2V1z M15.5,1h-2v3.5h2V1z"/>
                             </svg>
-                            <Text color="blackAlpha.700" fontFamily="'Poppins', sans-serif" fontWeight='normal' fontSize="0.9rem">Friday 17 May 2021</Text>
+                            <Text color="blackAlpha.700" fontFamily="'Poppins', sans-serif" fontWeight='normal' fontSize="0.9rem">{displayDateFormat(props.data.date)}</Text>
                         </Box>
                     </Box>
                 </Box>
                 <Box borderTop="1px solid" pl="3" pt="2" borderTopColor="blackAlpha.50"   display='flex' mt='6' alignItems='center'>
                     <Box display="flex" alignItems="center">
-                        <Text color="#0069FF">View appointment</Text>
+                        <Text color={GiveDate > currentDate ? "#0069FF": "gray.500"}>{GiveDate > currentDate ? 'active appointment': 'inactive appointment'}</Text>
                         <svg style={{width:"15px", height:"15px",marginLeft:"0.25rem"}} version="1.1" id="Export" xmlns="http://www.w3.org/2000/svg"  x="0px" y="0px"
                             viewBox="0 0 20 20" enableBackground="new 0 0 20 20" >
                             <path fill="#0069FF" d="M15,15H2V6h2.595c0,0,0.689-0.896,2.17-2H1C0.447,4,0,4.449,0,5v11c0,0.553,0.447,1,1,1h15
                             c0.553,0,1-0.447,1-1v-3.746l-2,1.645V15z M13.361,8.05v3.551L20,6.4l-6.639-4.999v3.131C5.3,4.532,5.3,12.5,5.3,12.5
                             C7.582,8.752,8.986,8.05,13.361,8.05z"/>
                         </svg>
+                      
                     </Box>
+                   
                 </Box>
                 </Box>
         </Box>
-    </Link>
+    </a>
     )
 }
