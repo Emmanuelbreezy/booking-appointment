@@ -8,7 +8,7 @@ export default function NavTab() {
             <Container pt={1} maxW={{base:"container.lg"}}>
                 <Box display="flex" alignItems="start" justifyContent="space-between">
                     <Tabs border="none">
-                        <Heading mb={4} fontWeight="normal"  fontSize="1.5rem" color="blackAlpha.700" fontFamily="'Poppins', sans-serif">My Bookings</Heading>
+                        <Heading mb={4} fontWeight="normal"  fontSize={{base:"1.0rem",md:"1.5rem"}} color="blackAlpha.700" fontFamily="'Poppins', sans-serif">My Bookings</Heading>
                         <TabList border="none" >
                             <Tab fontSize="0.955rem" pl={0} _hover={{ color:"blackAlpha.300"}} _selected={{ color: '#333',borderBottom:'3px solid #0069FF' }} fontFamily="'Poppins', sans-serif">Overview</Tab>
                         </TabList>
