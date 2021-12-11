@@ -45,7 +45,7 @@ export default function HomeUI() {
                           <Text>Loading...</Text>
                     </Box>
                       ): 
-                      (<SimpleGrid columns={[2, null, 3]} spacing='40px' >
+                      (<SimpleGrid columns={[1,2,3]} spacing='40px' >
                         {dataList.map(item => {
                           return  <BookingCard key={item.aid} data={item} />
                         })}
