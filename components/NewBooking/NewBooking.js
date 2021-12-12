@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useFormik } from 'formik';
@@ -6,10 +6,26 @@ import * as Yup from 'yup';
 import { Box,Container,Text,Button,Input,InputGroup,InputLeftAddon,FormErrorMessage,FormControl } from '@chakra-ui/react';
 import Calendar from '../Calendar/Calendar';
 
+import verifyAuth from '../../utils/getTokenLocalStorage';
+
+
+
 export default function NewBookingUI() {
     const router = useRouter()
     const [loading,setLoading] = useState(false);
     const [_date,setDate] = useState('');
+    const [token,setToken] = useState('');
+
+
+    useEffect(() => {
+        const [_token,_userId,checkAuth] = verifyAuth();
+        if(!checkAuth){
+            return router.replace('/auth/login');
+        }
+        setToken(_token);
+
+    }, [verifyAuth])
+
 
     const handleDateClick = (args) => {
        if(args.dateStr){
@@ -18,20 +34,23 @@ export default function NewBookingUI() {
     }
 
     const handleSubmitToApi = (data) =>{
-        if(data){
+        if(data && token){
             setLoading(true);
             fetch('/api/new-appointment',{
                 method:'POST',
                 body: JSON.stringify(data),
                 headers:{
+                    Authorization: 'Bearer '+ token,
                     'Content-Type': 'application/json'
                 }
             }).then(resp => {
                 return resp.json()
             }).then(data => {
+                console.log(data,'___8uu')
+                
                 setTimeout(()=>{
                     setLoading(false);
-                    router.push('/')
+                    router.push('/');
                 },1000)
 
             }).catch(err => {
@@ -106,7 +125,7 @@ export default function NewBookingUI() {
                                         <Text mb="2">Start Time</Text>
                                             <InputGroup>
                                                 <InputLeftAddon />
-                                                <Input type='time' name="startTime"cursor="pointer" placeholder='Start Time'
+                                                <Input type='time'  step="3600" name="startTime"cursor="pointer" placeholder='Start Time'
                                                 onChange={formik.handleChange}
                                                 onBlur={formik.handleBlur}
                                                 value={formik.values.startTime} 
@@ -123,7 +142,7 @@ export default function NewBookingUI() {
                                         <Text mb="2">End Time</Text>
                                         <InputGroup>
                                             <InputLeftAddon />
-                                            <Input type="time" name="endTime"  cursor="pointer" placeholder='End Time'
+                                            <Input type="time" name="endTime"  isDisabled={!formik.values.startTime} cursor="pointer" placeholder='End Time'
                                              onChange={formik.handleChange}
                                              onBlur={formik.handleBlur}
                                              value={formik.values.endTime}  />

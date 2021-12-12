@@ -11,3 +11,6 @@ charactersLength));
  var res = 'A'+result;
    return res;
 }
+
+
+

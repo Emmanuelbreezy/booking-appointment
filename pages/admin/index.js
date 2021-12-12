@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import {Box, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
+import {Box, Heading, Container,Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import Layout from '../../hoc/Layout/Layout';
 import AllUser from '../../components/AllUser/AllUser';
 import AllAppointment from '../../components/AllAppointment/AllAppointment';
@@ -18,7 +18,9 @@ export default function Admin() {
       </Head>
 
       <Layout>
-        <Box pt="2rem" pb="2rem">
+        <Box pt="1.5rem" pb="2rem">
+        <Container pb="1.5rem" maxW={{base:"container.lg"}}><Heading  fontWeight="normal"  fontSize="1.3rem" color="blackAlpha.700" 
+        fontFamily="'Poppins', sans-serif">Adiministration View</Heading></Container>
             <Box>
               <Tabs align="center" variant='enclosed'>
                 <TabList>
